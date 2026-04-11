@@ -1111,6 +1111,7 @@
       document.getElementById('formationLap').checked = false;
       document.getElementById('formationLapPct').value = '50';
       document.getElementById('results').classList.remove('show');
+      document.getElementById('currentPreset').classList.remove('show');
       
       setRaceType('minutes');
       document.getElementById('raceLength').value = '20';
@@ -1118,6 +1119,7 @@
       
       localStorage.removeItem('lmu_fuel');
       localStorage.removeItem('lmu_ve');
+      localStorage.removeItem('lmu_current_preset');
     }
 
     // Load saved data
