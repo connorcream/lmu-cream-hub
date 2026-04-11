@@ -447,8 +447,19 @@
       font-size: 1rem;
     }
 
-    .delete-preset:hover {
+    .delete-preset-btn {
+      padding: 0 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(239, 68, 68, 0.2);
       color: var(--red);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .delete-preset-btn:hover {
+      background: rgba(239, 68, 68, 0.4);
     }
 
     .calc-btn {
@@ -760,10 +771,11 @@
         </svg>
         Save
       </button>
-      <div class="load-dropdown">
-        <select id="presetSelect" onchange="loadPreset(this.value)">
+      <div class="load-dropdown" style="display:flex;gap:0.5rem;flex:1;">
+        <select id="presetSelect" onchange="loadPreset(this.value)" style="flex:1;">
           <option value="">📂 Load Preset</option>
         </select>
+        <button class="delete-preset-btn" onclick="deletePreset()" title="Delete">🗑️</button>
       </div>
     </div>
     <div class="current-preset" id="currentPreset">-</div>
@@ -933,20 +945,30 @@
       document.getElementById('presetSelect').value = '';
       
       showToast(currentLang === 'de' ? `✓ "${preset.name}" geladen!` : `✓ "${preset.name}" loaded!`);
+}
+    
+    function deletePreset() {
+      const select = document.getElementById('presetSelect');
+      const id = select.value;
+      if (!id) {
+        showToast(currentLang === 'de' ? 'Wähle ein Preset' : 'Select a preset');
+        return;
+      }
+      const presets = getPresets();
+      const preset = presets.find(p => p.id === id);
+      if (confirm(currentLang === 'de' ? `"${preset?.name}" löschen?` : `Delete "${preset?.name}"?`)) {
+        const filtered = presets.filter(p => p.id !== id);
+        savePresets(filtered);
+        localStorage.removeItem('lmu_current_preset');
+        loadPresetDropdown();
+        showToast(currentLang === 'de' ? '✓ Gelöscht!' : '✓ Deleted!');
+      }
     }
 
-    // Add deletePreset to localStorage functions
+    // Legacy keyboard delete (keep for backwards compatibility)
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Delete' && document.activeElement.tagName === 'SELECT') {
-        const select = document.getElementById('presetSelect');
-        const id = select.value;
-        if (id && confirm(currentLang === 'de' ? 'Preset löschen?' : 'Delete preset?')) {
-          const presets = getPresets().filter(p => p.id !== id);
-          savePresets(presets);
-          localStorage.removeItem('lmu_current_preset');
-          loadPresetDropdown();
-          showToast(currentLang === 'de' ? '✓ Gelöscht!' : '✓ Deleted!');
-        }
+        deletePreset();
       }
     });
 
