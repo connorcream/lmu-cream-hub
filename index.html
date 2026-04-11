@@ -302,6 +302,21 @@
       font-weight: 500;
     }
 
+    .formation-wrapper {
+      gap: 0.5rem;
+    }
+
+    .formation-wrapper .pct-input {
+      width: 50px;
+      padding: 0.25rem 0.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: white;
+    }
+
     /* Buttons */
     .btn-row {
       display: flex;
@@ -627,6 +642,13 @@
           <input type="checkbox" id="safetyLap" checked>
           <span>+1 Runde</span>
         </label>
+        
+        <label class="checkbox-wrapper formation-wrapper">
+          <input type="checkbox" id="formationLap">
+          <span>Formation Lap</span>
+          <input type="number" id="formationLapPct" value="50" class="pct-input">
+          <span>%</span>
+        </label>
       </div>
     </div>
 
@@ -745,8 +767,13 @@
 
       if (safetyLap) totalLaps++;
 
+      // Formation Lap (adds extra fuel, not laps)
+      const formationLap = document.getElementById('formationLap').checked;
+      const formationLapPct = parseInt(document.getElementById('formationLapPct').value) || 50;
+      const formationLapFuel = formationLap ? (fuelPerLap * formationLapPct / 100) : 0;
+
       const maxLapsPerVE = Math.floor(100 / vePerLap);
-      const fuelNeeded = totalLaps * fuelPerLap;
+      const fuelNeeded = (totalLaps * fuelPerLap) + formationLapFuel;
       const fuelRatio = (fuelNeeded / 100).toFixed(1);
       const numberOfPitstops = Math.max(0, Math.ceil(totalLaps / maxLapsPerVE) - 1);
 
@@ -818,6 +845,8 @@
       document.getElementById('lapSec').value = '';
       document.getElementById('lapMs').value = '';
       document.getElementById('safetyLap').checked = true;
+      document.getElementById('formationLap').checked = false;
+      document.getElementById('formationLapPct').value = '50';
       document.getElementById('results').classList.remove('show');
       
       setRaceType('minutes');
