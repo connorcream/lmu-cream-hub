@@ -351,6 +351,106 @@
       height: 18px;
     }
 
+    .save-load-btns {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .save-btn, .load-btn {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .save-btn:hover, .load-btn:hover {
+      border-color: var(--primary);
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .load-dropdown {
+      position: relative;
+      flex: 1;
+    }
+
+    .load-dropdown select {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1rem;
+    }
+
+    .load-dropdown select option {
+      background: var(--bg-card);
+      color: var(--text);
+    }
+
+    .current-preset {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(135deg, var(--green) 0%, #16a34a 100%);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .delete-preset {
+      position: absolute;
+      right: 2.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .delete-preset:hover {
+      color: var(--red);
+    }
+
     .calc-btn {
       flex: 1;
       padding: 1.5rem;
@@ -652,6 +752,22 @@
       </div>
     </div>
 
+    <!-- Save / Load Buttons -->
+    <div class="save-load-btns">
+      <button class="save-btn" onclick="savePreset()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+        </svg>
+        Save
+      </button>
+      <div class="load-dropdown">
+        <select id="presetSelect" onchange="loadPreset(this.value)">
+          <option value="">📂 Load Preset</option>
+        </select>
+      </div>
+    </div>
+    <div class="current-preset" id="currentPreset">-</div>
+
     <!-- Buttons -->
     <div class="btn-row">
       <button class="reset-btn" onclick="resetAll()">
@@ -708,6 +824,9 @@
       </div>
     </div>
 
+    <!-- Toast Feedback -->
+    <div class="toast" id="toast"></div>
+
     <!-- Info -->
     <div class="info-text" id="infoText">
       <span data-de="Werte aus dem HUD im Spiel ablesen" data-en="Read values from in-game HUD">Werte aus dem HUD im Spiel ablesen</span>
@@ -722,7 +841,114 @@
       setRaceType('minutes');
       document.getElementById('raceLength').value = '20';
       document.getElementById('safetyLap').checked = true;
+      loadPresetDropdown();
     };
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function getPresets() {
+      const stored = localStorage.getItem('lmu_presets');
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    function savePresets(presets) {
+      localStorage.setItem('lmu_presets', JSON.stringify(presets));
+    }
+
+    function savePreset() {
+      const name = prompt(currentLang === 'de' ? 'Name für Preset:' : 'Preset name:');
+      if (!name) return;
+      
+      const preset = {
+        id: Date.now().toString(),
+        name: name,
+        fuel: document.getElementById('fuel').value,
+        ve: document.getElementById('ve').value,
+        lapMin: document.getElementById('lapMin').value,
+        lapSec: document.getElementById('lapSec').value,
+        lapMs: document.getElementById('lapMs').value,
+        raceLength: document.getElementById('raceLength').value,
+        safetyLap: document.getElementById('safetyLap').checked,
+        formationLap: document.getElementById('formationLap').checked,
+        formationLapPct: document.getElementById('formationLapPct').value,
+        raceType: raceType,
+        created: new Date().toISOString()
+      };
+      
+      const presets = getPresets();
+      presets.push(preset);
+      savePresets(presets);
+      
+      loadPresetDropdown();
+      showToast(currentLang === 'de' ? `✓ "${name}" gespeichert!` : `✓ "${name}" saved!`);
+    }
+
+    function loadPresetDropdown() {
+      const select = document.getElementById('presetSelect');
+      const presets = getPresets();
+      
+      select.innerHTML = '<option value="">📂 Load Preset</option>';
+      presets.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.id;
+        option.textContent = p.name;
+        select.appendChild(option);
+      });
+      
+      // Update current preset display
+      const currentPresetName = localStorage.getItem('lmu_current_preset');
+      document.getElementById('currentPreset').textContent = currentPresetName || '-';
+    }
+
+    function loadPreset(id) {
+      if (!id) return;
+      
+      const presets = getPresets();
+      const preset = presets.find(p => p.id === id);
+      if (!preset) return;
+      
+      document.getElementById('fuel').value = preset.fuel;
+      document.getElementById('ve').value = preset.ve;
+      document.getElementById('lapMin').value = preset.lapMin;
+      document.getElementById('lapSec').value = preset.lapSec;
+      document.getElementById('lapMs').value = preset.lapMs;
+      document.getElementById('raceLength').value = preset.raceLength;
+      document.getElementById('safetyLap').checked = preset.safetyLap;
+      document.getElementById('formationLap').checked = preset.formationLap;
+      document.getElementById('formationLapPct').value = preset.formationLapPct;
+      
+      if (preset.raceType) {
+        setRaceType(preset.raceType);
+      }
+      
+      localStorage.setItem('lmu_current_preset', preset.name);
+      document.getElementById('currentPreset').textContent = preset.name;
+      
+      // Reset dropdown to empty
+      document.getElementById('presetSelect').value = '';
+      
+      showToast(currentLang === 'de' ? `✓ "${preset.name}" geladen!` : `✓ "${preset.name}" loaded!`);
+    }
+
+    // Add deletePreset to localStorage functions
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Delete' && document.activeElement.tagName === 'SELECT') {
+        const select = document.getElementById('presetSelect');
+        const id = select.value;
+        if (id && confirm(currentLang === 'de' ? 'Preset löschen?' : 'Delete preset?')) {
+          const presets = getPresets().filter(p => p.id !== id);
+          savePresets(presets);
+          localStorage.removeItem('lmu_current_preset');
+          loadPresetDropdown();
+          showToast(currentLang === 'de' ? '✓ Gelöscht!' : '✓ Deleted!');
+        }
+      }
+    });
 
     function setLang(lang) {
       currentLang = lang;
