@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMU Cream Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #f59e0b;
+      --primary-dark: #d97706;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-light: #334155;
+      --border: #475569;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --blue: #3b82f6;
+      --green: #22c55e;
+      --orange: #f97316;
+      --yellow: #eab308;
+      --purple: #a855f7;
+      --red: #ef4444;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh;
+      color: var(--text);
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--orange) 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+    }
+
+    .logo-icon svg {
+      width: 32px;
+      height: 32px;
+      color: white;
+    }
+
+    .logo h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .logo p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .lang-switch {
+      display: flex;
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .lang-btn {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--orange) 100%);
+      color: white;
+    }
+
+    .lang-btn:hover:not(.active) {
+      color: var(--text);
+    }
+
+    /* Input Grid */
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .input-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-card {
+      background: linear-gradient(180deg, var(--bg-card) 0%, rgba(30, 41, 59, 0.5) 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 1.5rem;
+    }
+
+    .input-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .input-label-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .input-label-icon.orange { background: rgba(249, 115, 22, 0.2); color: var(--orange); }
+    .input-label-icon.yellow { background: rgba(234, 179, 8, 0.2); color: var(--yellow); }
+
+    .input-label span {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      color: white;
+      font-size: 1.25rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
+      text-align: center;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+    }
+
+    input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .input-suffix {
+      position: relative;
+    }
+
+    .input-suffix input {
+      padding-right: 3rem;
+    }
+
+    .input-suffix span {
+      position: absolute;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    /* Race Options */
+    .race-options {
+      background: linear-gradient(180deg, var(--bg-card) 0%, rgba(30, 41, 59, 0.5) 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .race-options-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .racetype-btn {
+      padding: 12px 24px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .racetype-btn.active {
+      background: linear-gradient(135deg, var(--blue) 0%, #2563eb 100%);
+      border-color: var(--blue);
+      color: white;
+    }
+
+    .racetype-btn:hover:not(.active) {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+
+    .lap-input {
+      flex: 1;
+      min-width: 120px;
+      max-width: 200px;
+    }
+
+    .lap-input input {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .avg-lap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .avg-lap span {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+.avg-lap input {
+      width: 70px;
+      padding: 0.875rem 0.5rem;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    .avg-lap input:last-of-type {
+      width: 55px;
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper:hover {
+      border-color: var(--text-muted);
+    }
+
+    .checkbox-wrapper input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary);
+    }
+
+    .checkbox-wrapper span {
+      font-weight: 500;
+    }
+
+    .formation-wrapper {
+      gap: 0.5rem;
+    }
+
+    .formation-wrapper .pct-input {
+      width: 50px;
+      padding: 0.25rem 0.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: white;
+    }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .reset-btn {
+      flex: 0 0 auto;
+      padding: 1rem 1.5rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .reset-btn:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .reset-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(135deg, var(--green) 0%, #16a34a 100%);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .delete-preset {
+      position: absolute;
+      right: 2.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .delete-preset-btn {
+      padding: 0 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--red);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .delete-preset-btn:hover {
+      background: rgba(239, 68, 68, 0.4);
+    }
+
+    .calc-btn {
+      flex: 1;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--orange) 100%);
+      border: none;
+      border-radius: 24px;
+      color: #0f172a;
+      font-size: 1.25rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+    }
+
+    .calc-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 48px rgba(245, 158, 11, 0.4);
+    }
+
+    .calc-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Results */
+    .results {
+      margin-top: 2rem;
+      background: linear-gradient(180deg, var(--bg-card) 0%, rgba(30, 41, 59, 0.5) 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .results.show {
+      display: block;
+    }
+
+    .results-header {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--orange) 100%);
+      padding: 1.5rem 2rem;
+    }
+
+    .results-header h2 {
+      color: #0f172a;
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .results-body {
+      padding: 2rem;
+    }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .stat {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+    }
+
+    .stat-value.blue { color: var(--blue); }
+    .stat-value.yellow { color: var(--yellow); }
+    .stat-value.orange { color: var(--orange); }
+    .stat-value.purple { color: var(--purple); }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.5rem;
+    }
+
+    /* Pitstops */
+    .pitstops {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 16px;
+      padding: 1.25rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .pitstops span {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Stints */
+    .stints-label {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .stints {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stint {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .stint-card {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+    }
+
+    .stint-card:nth-child(odd) {
+      background: rgba(30, 41, 59, 0.5);
+    }
+
+    .stint-num {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--orange) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+
+    .stint-data {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .stint-data span:first-child {
+      color: var(--text-muted);
+    }
+
+    .stint-data .fuel {
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    .stint-data .ve {
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
+    .stint-arrow {
+      width: 32px;
+      height: 32px;
+      background: var(--bg-card-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    /* Info Text */
+    .info-text {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <div>
+          <h1>LMU Cream Hub</h1>
+          <p>Virtual Energy & Fuel Calculator</p>
+        </div>
+      </div>
+      <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('de')">DE</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+
+    <!-- Input Grid -->
+    <div class="input-grid">
+      <div class="input-card">
+        <div class="input-label">
+          <div class="input-label-icon orange">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+            </svg>
+          </div>
+          <span data-de="Sprit pro Runde" data-en="Fuel per lap">Sprit pro Runde</span>
+        </div>
+        <div class="input-suffix">
+          <input type="number" id="fuel" step="0.1" placeholder="3.5">
+          <span>L</span>
+        </div>
+      </div>
+
+      <div class="input-card">
+        <div class="input-label">
+          <div class="input-label-icon yellow">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <span data-de="VE pro Runde" data-en="VE per lap">VE pro Runde</span>
+        </div>
+        <div class="input-suffix">
+          <input type="number" id="ve" step="0.1" placeholder="5.0">
+          <span>%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Race Options -->
+    <div class="race-options">
+      <div class="race-options-inner">
+        <button class="racetype-btn" data-type="laps" onclick="setRaceType('laps')">
+          <span data-de="Runden" data-en="Laps">Runden</span>
+        </button>
+        <button class="racetype-btn active" data-type="minutes" onclick="setRaceType('minutes')">
+          <span data-de="Minuten" data-en="Minutes">Minuten</span>
+        </button>
+        
+        <div class="lap-input">
+          <input type="number" id="raceLength" placeholder="20">
+        </div>
+        
+        <div class="avg-lap" id="avgLapSection">
+          <span>Ø Lap:</span>
+          <input type="number" id="lapMin" placeholder="2" style="width:70px">
+          <span>:</span>
+          <input type="number" id="lapSec" placeholder="00" style="width:70px">
+          <span>.</span>
+          <input type="number" id="lapMs" placeholder="000" style="width:70px">
+        </div>
+        
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="safetyLap" checked>
+          <span>+1 Runde</span>
+        </label>
+        
+        <label class="checkbox-wrapper formation-wrapper">
+          <input type="checkbox" id="formationLap">
+          <span>Formation Lap</span>
+          <input type="number" id="formationLapPct" value="50" class="pct-input">
+          <span>%</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-row">
+      <button class="reset-btn" onclick="resetAll()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        <span data-de="Zurücksetzen" data-en="Reset">Zurücksetzen</span>
+      </button>
+      
+      <button class="calc-btn" onclick="calculate()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v3m0-3h3m-3 0H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-3M9 15h6m-6 4h6"/>
+        </svg>
+        <span data-de="Berechnen" data-en="Calculate">Berechnen</span>
+      </button>
+    </div>
+
+    <!-- Results -->
+    <div class="results" id="results">
+      <div class="results-header">
+        <h2>
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span data-de="Ergebnis" data-en="Result">Ergebnis</span>
+        </h2>
+      </div>
+      <div class="results-body">
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-value blue" id="totalLaps">0</div>
+            <div class="stat-label" data-de="Runden" data-en="Laps">Runden</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value yellow" id="maxLapsPerVE">0</div>
+            <div class="stat-label">Max/VE</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value orange" id="fuelNeeded">0L</div>
+            <div class="stat-label">Fuel</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value purple" id="fuelRatio">0</div>
+            <div class="stat-label">Ratio</div>
+          </div>
+        </div>
+        
+        <div class="pitstops">
+          <span>🛠️ <span id="pitstopCount">0</span> <span data-de="Boxenstopps" data-en="Pitstops">Boxenstopps</span></span>
+        </div>
+        
+        <div class="stints-label">📋 STINTS</div>
+        <div class="stints" id="stintsList"></div>
+      </div>
+    </div>
+
+    <!-- Toast Feedback -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Info -->
+    <div class="info-text" id="infoText">
+      <span data-de="Werte aus dem HUD im Spiel ablesen" data-en="Read values from in-game HUD">Werte aus dem HUD im Spiel ablesen</span>
+    </div>
+  </div>
+
+  <script>
+    let currentLang = 'de';
+    let raceType = 'minutes';
+
+    window.onload = () => {
+      setRaceType('minutes');
+      document.getElementById('raceLength').value = '20';
+      document.getElementById('safetyLap').checked = true;
+      loadPresetDropdown();
+    };
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function getPresets() {
+      const stored = localStorage.getItem('lmu_presets');
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    function savePresets(presets) {
+      localStorage.setItem('lmu_presets', JSON.stringify(presets));
+    }
+
+    function savePreset() {
+      const name = prompt(currentLang === 'de' ? 'Name für Preset:' : 'Preset name:');
+      if (!name) return;
+      
+      const preset = {
+        id: Date.now().toString(),
+        name: name,
+        fuel: document.getElementById('fuel').value,
+        ve: document.getElementById('ve').value,
+        lapMin: document.getElementById('lapMin').value,
+        lapSec: document.getElementById('lapSec').value,
+        lapMs: document.getElementById('lapMs').value,
+        raceLength: document.getElementById('raceLength').value,
+        safetyLap: document.getElementById('safetyLap').checked,
+        formationLap: document.getElementById('formationLap').checked,
+        formationLapPct: document.getElementById('formationLapPct').value,
+        raceType: raceType,
+        created: new Date().toISOString()
+      };
+      
+      const presets = getPresets();
+      presets.push(preset);
+      savePresets(presets);
+      
+      loadPresetDropdown();
+      showToast(currentLang === 'de' ? `✓ "${name}" gespeichert!` : `✓ "${name}" saved!`);
+    }
+
+    function loadPresetDropdown() {
+      const select = document.getElementById('presetSelect');
+      const presets = getPresets();
+      
+      select.innerHTML = '<option value="">📂 Load Preset</option>';
+      presets.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.id;
+        option.textContent = p.name;
+        select.appendChild(option);
+      });
+      
+      // Update current preset display
+      const currentPresetName = localStorage.getItem('lmu_current_preset');
+      if (currentPresetName) {
+        document.getElementById('currentPreset').textContent = '📂 ' + currentPresetName;
+        document.getElementById('currentPreset').classList.add('show');
+      } else {
+        document.getElementById('currentPreset').classList.remove('show');
+      }
+    }
+
+    function loadPreset(id) {
+      if (!id) return;
+      
+      const presets = getPresets();
+      const preset = presets.find(p => p.id === id);
+      if (!preset) return;
+      
+      document.getElementById('fuel').value = preset.fuel;
+      document.getElementById('ve').value = preset.ve;
+      document.getElementById('lapMin').value = preset.lapMin;
+      document.getElementById('lapSec').value = preset.lapSec;
+      document.getElementById('lapMs').value = preset.lapMs;
+      document.getElementById('raceLength').value = preset.raceLength;
+      document.getElementById('safetyLap').checked = preset.safetyLap;
+      document.getElementById('formationLap').checked = preset.formationLap;
+      document.getElementById('formationLapPct').value = preset.formationLapPct;
+      
+      if (preset.raceType) {
+        setRaceType(preset.raceType);
+      }
+      
+      localStorage.setItem('lmu_current_preset', preset.name);
+      document.getElementById('currentPreset').textContent = '📂 ' + preset.name;
+      document.getElementById('currentPreset').classList.add('show');
+      
+      // Reset dropdown to empty
+      document.getElementById('presetSelect').value = '';
+      
+      showToast(currentLang === 'de' ? `✓ "${preset.name}" geladen!` : `✓ "${preset.name}" loaded!`);
+}
+    
+    function deletePreset() {
+      const select = document.getElementById('presetSelect');
+      const id = select.value;
+      if (!id) {
+        showToast(currentLang === 'de' ? 'Wähle ein Preset' : 'Select a preset');
+        return;
+      }
+      const presets = getPresets();
+      const preset = presets.find(p => p.id === id);
+      if (confirm(currentLang === 'de' ? `"${preset?.name}" löschen?` : `Delete "${preset?.name}"?`)) {
+        const filtered = presets.filter(p => p.id !== id);
+        savePresets(filtered);
+        localStorage.removeItem('lmu_current_preset');
+        loadPresetDropdown();
+        showToast(currentLang === 'de' ? '✓ Gelöscht!' : '✓ Deleted!');
+      }
+    }
+
+    // Legacy keyboard delete (keep for backwards compatibility)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Delete' && document.activeElement.tagName === 'SELECT') {
+        deletePreset();
+      }
+    });
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+      });
+      
+      document.querySelectorAll('[data-de]').forEach(el => {
+        const key = el.getAttribute(`data-${lang}`);
+        if (key) el.textContent = key;
+      });
+    }
+
+    function setRaceType(type) {
+      raceType = type;
+      document.querySelectorAll('.racetype-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.type === type);
+      });
+      document.getElementById('avgLapSection').style.display = type === 'minutes' ? 'flex' : 'none';
+    }
+
+    function calculate() {
+      const fuelPerLap = parseFloat(document.getElementById('fuel').value);
+      const vePerLap = parseFloat(document.getElementById('ve').value);
+      const raceLength = parseInt(document.getElementById('raceLength').value);
+      const safetyLap = document.getElementById('safetyLap').checked;
+
+      if (!fuelPerLap || !vePerLap || !raceLength) {
+        alert(currentLang === 'de' ? 'Bitte alle Felder ausfüllen!' : 'Please fill in all fields!');
+        return;
+      }
+
+      let totalLaps = raceLength;
+      
+      if (raceType === 'minutes') {
+        const lapMin = parseInt(document.getElementById('lapMin').value) || 2;
+        const lapSecVal = parseInt(document.getElementById('lapSec').value) || 0;
+        const lapMsVal = parseInt(document.getElementById('lapMs').value) || 0;
+        const lapTime = lapMin * 60 + lapSecVal + lapMsVal / 1000;
+        totalLaps = Math.ceil((raceLength * 60) / lapTime);
+      }
+
+      if (safetyLap) totalLaps++;
+
+      // Formation Lap (adds extra fuel, not laps)
+      const formationLap = document.getElementById('formationLap').checked;
+      const formationLapPct = parseInt(document.getElementById('formationLapPct').value) || 50;
+      const formationLapFuel = formationLap ? (fuelPerLap * formationLapPct / 100) : 0;
+
+      const maxLapsPerVE = Math.floor(100 / vePerLap);
+      const fuelNeeded = (totalLaps * fuelPerLap) + formationLapFuel;
+      const fuelRatio = (fuelNeeded / 100).toFixed(1);
+      const numberOfPitstops = Math.max(0, Math.ceil(totalLaps / maxLapsPerVE) - 1);
+
+      // Generate stints
+      const stints = [];
+      let remainingLaps = totalLaps;
+      let currentLap = 1;
+      let stintNum = 1;
+
+      while (remainingLaps > 0) {
+        const lapsThisStint = Math.min(remainingLaps, maxLapsPerVE);
+        const fuelThisStint = (lapsThisStint * fuelPerLap).toFixed(1);
+        const veThisStint = (lapsThisStint * vePerLap).toFixed(1);
+        
+        stints.push({
+          stintNumber: stintNum,
+          startLap: currentLap,
+          pitOnLap: currentLap + lapsThisStint - 1,
+          lapsThisStint,
+          fuelThisStint,
+          veThisStint
+        });
+
+        remainingLaps -= lapsThisStint;
+        currentLap += lapsThisStint;
+        stintNum++;
+      }
+
+      // Display results
+      document.getElementById('totalLaps').textContent = totalLaps;
+      document.getElementById('maxLapsPerVE').textContent = maxLapsPerVE;
+      document.getElementById('fuelNeeded').textContent = fuelNeeded.toFixed(1) + 'L';
+      document.getElementById('fuelRatio').textContent = fuelRatio;
+      document.getElementById('pitstopCount').textContent = numberOfPitstops;
+
+      // Stints list
+      const stintsList = document.getElementById('stintsList');
+      stintsList.innerHTML = '';
+      stints.forEach((stint, idx) => {
+        const div = document.createElement('div');
+        div.className = 'stint';
+        div.innerHTML = `
+          <div class="stint-card">
+            <div class="stint-num">${stint.stintNumber}</div>
+            <div class="stint-data">
+              <div>Laps: <span>${stint.startLap}-${stint.pitOnLap}</span></div>
+              <div class="fuel">Fuel: <span>${stint.fuelThisStint}L</span></div>
+              <div class="ve">VE: <span>${stint.veThisStint}%</span></div>
+            </div>
+          </div>
+          ${idx < stints.length - 1 ? '<div class="stint-arrow">↓</div>' : ''}
+        `;
+        stintsList.appendChild(div);
+      });
+
+      // Show results
+      document.getElementById('results').classList.add('show');
+
+      // Save
+      localStorage.setItem('lmu_fuel', fuelPerLap);
+      localStorage.setItem('lmu_ve', vePerLap);
+    }
+
+    function resetAll() {
+      document.getElementById('fuel').value = '';
+      document.getElementById('ve').value = '';
+      document.getElementById('raceLength').value = '';
+      document.getElementById('lapMin').value = '';
+      document.getElementById('lapSec').value = '';
+      document.getElementById('lapMs').value = '';
+      document.getElementById('safetyLap').checked = true;
+      document.getElementById('formationLap').checked = false;
+      document.getElementById('formationLapPct').value = '50';
+      document.getElementById('results').classList.remove('show');
+      document.getElementById('currentPreset').classList.remove('show');
+      
+      setRaceType('minutes');
+      document.getElementById('raceLength').value = '20';
+      setLang(currentLang);
+      
+      localStorage.removeItem('lmu_fuel');
+      localStorage.removeItem('lmu_ve');
+      localStorage.removeItem('lmu_current_preset');
+    }
+
+    // Load saved data
+    const savedFuel = localStorage.getItem('lmu_fuel');
+    const savedVe = localStorage.getItem('lmu_ve');
+    if (savedFuel) document.getElementById('fuel').value = savedFuel;
+    if (savedVe) document.getElementById('ve').value = savedVe;
+  </script>
+</body>
+</html>
