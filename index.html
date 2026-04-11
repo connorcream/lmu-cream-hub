@@ -408,9 +408,18 @@
 
     .current-preset {
       text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
+      font-size: 0.85rem;
+      color: var(--primary);
       margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(245, 158, 11, 0.15);
+      border-radius: 8px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      display: none;
+    }
+
+    .current-preset.show {
+      display: block;
     }
 
     .toast {
@@ -914,7 +923,12 @@
       
       // Update current preset display
       const currentPresetName = localStorage.getItem('lmu_current_preset');
-      document.getElementById('currentPreset').textContent = currentPresetName || '-';
+      if (currentPresetName) {
+        document.getElementById('currentPreset').textContent = '📂 ' + currentPresetName;
+        document.getElementById('currentPreset').classList.add('show');
+      } else {
+        document.getElementById('currentPreset').classList.remove('show');
+      }
     }
 
     function loadPreset(id) {
@@ -939,7 +953,8 @@
       }
       
       localStorage.setItem('lmu_current_preset', preset.name);
-      document.getElementById('currentPreset').textContent = preset.name;
+      document.getElementById('currentPreset').textContent = '📂 ' + preset.name;
+      document.getElementById('currentPreset').classList.add('show');
       
       // Reset dropdown to empty
       document.getElementById('presetSelect').value = '';
